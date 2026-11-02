@@ -21,7 +21,7 @@ for your preview access; this sample does not promise availability in any region
 
 ## Run locally
 
-Fork [Azure-Samples/app-service-builder-nodejs](https://github.com/Azure-Samples/app-service-builder-nodejs/fork)
+Fork [AzureAppService/app-service-builder-nodejs](https://github.com/AzureAppService/app-service-builder-nodejs/fork)
 into your GitHub account, then replace `<your-github-account>`:
 
 ```sh
