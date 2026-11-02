@@ -11,6 +11,13 @@ local checks do not establish successful cloud builds, runtime startup, source
 authorization, or preview availability. Use a subscription and location enabled
 for your preview access; this sample does not promise availability in any region.
 
+## Preview
+
+The screenshot shows `/demo`, the visual showcase. The root `/` endpoint
+continues to return the original plain-text greeting.
+
+![Node.js demo with a lime greeting panel beside a dark HTTP response panel and runtime details](https://github.com/user-attachments/assets/0cdd1a8d-c906-4130-97e9-055b9ced4eb0)
+
 ## Prerequisites
 
 - Node.js **24.x** and its bundled npm, Git, and curl for the local commands.
