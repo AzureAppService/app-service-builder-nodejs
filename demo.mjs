@@ -116,7 +116,7 @@ FORM: Brief-pinned ink-and-lime showcase, with a responsive split composition.
         <div class="terminal">
           <div class="terminal-heading"><span><span class="terminal-icon" aria-hidden="true">&gt;_</span>HTTP response</span><span>GET /</span></div>
           <div class="request"><span class="prompt" aria-hidden="true">$ </span><code>curl -i http://localhost:8080/</code></div>
-          <p class="response-label">Plain-text greeting</p>
+          <p class="response-label">Public greeting in this HTML response</p>
           <p class="response">App Service Builder / nodejs-web: ${text}</p>
           <p class="terminal-note">One public setting: SAMPLE_GREETING.<br>No dependencies. No external services.</p>
         </div>
@@ -130,7 +130,7 @@ FORM: Brief-pinned ink-and-lime showcase, with a responsive split composition.
         <div><h2 id="guide-title">Small by design.</h2><p>A dependency-free sample for learning the App Service Builder GitHub-source workflow.</p></div>
         <div>
           <details><summary>Make the greeting yours</summary><p>Set <code>SAMPLE_GREETING</code> to your own public text. An unset or empty value uses <code>Hello</code>. In Portal, save and deploy a new version to apply it. Never use a secret as your greeting.</p></details>
-          <details><summary>Explore the HTTP routes</summary><p><a href="/">/</a> returns the plain-text greeting. <a href="/health">/health</a> returns <code>OK</code>. This showcase lives at <code>/demo</code>; unknown paths return <code>Not found</code> with status 404.</p></details>
+          <details><summary>Explore the HTTP routes</summary><p><a href="/">/</a> returns this HTML showcase with your public greeting. <a href="/health">/health</a> returns <code>OK</code>; unknown paths return <code>Not found</code> with status 404.</p></details>
         </div>
       </section>
     </main>

@@ -13,8 +13,7 @@ for your preview access; this sample does not promise availability in any region
 
 ## Preview
 
-The screenshot shows `/demo`, the visual showcase. The root `/` endpoint
-continues to return the original plain-text greeting.
+The screenshot shows the visual showcase served directly at `/`.
 
 ![Node.js demo with a lime greeting panel beside a dark HTTP response panel and runtime details](https://github.com/user-attachments/assets/0cdd1a8d-c906-4130-97e9-055b9ced4eb0)
 
@@ -42,7 +41,12 @@ node server.mjs
 
 The lockfile records an empty dependency graph; `npm ci` installs no third-party
 packages. The checks use Node's built-in test runner and start and stop their own
-server on OS-assigned ports, without using port 8080. Leave the final command
+server on OS-assigned ports, without using port 8080. They cover actual root HTML,
+escaped and empty greetings, query strings, health, unknown routes, and the removed
+showcase route returning 404. They preserve the simple server's existing method
+behavior: POST uses the same path handler, and HEAD returns the same headers without
+a body. There is no separate build or lint command; `node --check server.mjs` and
+`node --check demo.mjs` check syntax. Leave the final command
 running and use a second terminal:
 
 ```sh
@@ -51,23 +55,23 @@ curl -i http://localhost:8080/health
 curl -i http://localhost:8080/not-found
 ```
 
-Open `http://localhost:8080/demo` in a browser for the visual Node.js showcase.
+Open `http://localhost:8080/` in a browser for the visual Node.js showcase.
 It displays the same public greeting with a responsive ink-and-lime layout,
 runtime details, real endpoint links, and keyboard-accessible expandable
 instructions. It uses inline CSS, system fonts, and no JavaScript or external
-assets. The original endpoints are unchanged; there is no content negotiation.
+assets. The root serves HTML directly, without a redirect or content negotiation.
 
-| Path | Status | Plain-text body |
+| Path | Status | Response body |
 | --- | --- | --- |
-| `/` | 200 | `App Service Builder / nodejs-web: Hello` |
+| `/` | 200 | HTML showcase displaying the public greeting `Hello` |
 | `/health` | 200 | `OK` |
 | Any unknown path | 404 | `Not found` |
 
-`/demo` returns HTTP **200** with `text/html; charset=utf-8`, not plain text.
-Use `/demo` for template thumbnails and `/health` for health checks.
+`/` returns HTTP **200** with `text/html; charset=utf-8`.
+Use `/` for template thumbnails and `/health` for health checks.
 
-Responses end with a newline. Stop the server with **Ctrl+C** before running
-tests again or starting another instance.
+Health and not-found text responses end with a newline. Stop the server with
+**Ctrl+C** before running tests again or starting another instance.
 
 ## Deploy your fork with Portal
 
@@ -124,11 +128,11 @@ only this setting, not the rest of the environment. An unset or empty value uses
 SAMPLE_GREETING="Welcome" node server.mjs
 ```
 
-In a second terminal, `curl -i http://localhost:8080/` should return
-`App Service Builder / nodejs-web: Welcome`. `/health` remains `OK`. Stop the
+In a second terminal, `curl -i http://localhost:8080/` should return HTML displaying
+the greeting `Welcome`. `/health` remains `OK`. Stop the
 server with **Ctrl+C**.
 
-The `/demo` page displays that same greeting, HTML-escaped as text. It never
+The `/` page displays that greeting, HTML-escaped as text. It never
 reflects any other environment variables.
 
 For a deployed app, add `SAMPLE_GREETING` in Portal **Variables**.

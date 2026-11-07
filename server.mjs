@@ -6,14 +6,9 @@ createServer((request, response) => {
   response.setHeader('Content-Type', 'text/plain; charset=utf-8');
   if (path === '/health') {
     response.writeHead(200).end('OK\n');
-  } else if (path === '/demo') {
+  } else if (path === '/') {
     response.setHeader('Content-Type', 'text/html; charset=utf-8');
     response.writeHead(200).end(renderDemo(process.env.SAMPLE_GREETING || 'Hello'));
-  } else if (path === '/') {
-    // Only this deliberately public setting is reflected; never dump process.env.
-    response.writeHead(200).end(
-      `App Service Builder / nodejs-web: ${process.env.SAMPLE_GREETING || 'Hello'}\n`,
-    );
   } else {
     response.writeHead(404).end('Not found\n');
   }

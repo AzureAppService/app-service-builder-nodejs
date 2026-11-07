@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { readFile } from 'node:fs/promises';
-import { get } from 'node:http';
+import { request as httpRequest } from 'node:http';
 import { setTimeout as delay } from 'node:timers/promises';
 import { test } from 'node:test';
 import { renderDemo } from './demo.mjs';
@@ -55,9 +55,9 @@ Server.prototype.listen = function (port, host) {
 await import('./server.mjs');
 `;
 
-function request(port, path, headers = {}) {
+function request(port, path, headers = {}, method = 'GET') {
   return new Promise((resolve, reject) => {
-    const req = get(`http://127.0.0.1:${port}${path}`, { headers }, (response) => {
+    const req = httpRequest(`http://127.0.0.1:${port}${path}`, { headers, method }, (response) => {
       let body = '';
       response.setEncoding('utf8');
       response.on('data', (chunk) => { body += chunk; });
@@ -70,6 +70,7 @@ function request(port, path, headers = {}) {
     });
     req.on('error', reject);
     req.setTimeout(1000, () => req.destroy(new Error(`Timed out requesting ${path}`)));
+    req.end();
   });
 }
 
@@ -115,28 +116,36 @@ test('HTTP routes and public greeting work with no external services', { timeout
         ]);
         assert.equal(Number.isInteger(port) && port > 0 && port <= 65535, true);
         await waitForServer(child, port, () => stderr);
-        assert.deepEqual(await request(port, '/'), {
+        const rootResponse = {
           status: 200,
-          type: 'text/plain; charset=utf-8',
-          body: `App Service Builder / nodejs-web: ${greeting || 'Hello'}\n`,
-        });
-        assert.deepEqual(await request(port, '/', { Accept: 'text/html' }), {
-          status: 200,
-          type: 'text/plain; charset=utf-8',
-          body: `App Service Builder / nodejs-web: ${greeting || 'Hello'}\n`,
-        });
-        const demo = await request(port, '/demo');
-        assert.equal(demo.status, 200);
-        assert.equal(demo.type, 'text/html; charset=utf-8');
-        assert.equal(demo.body, renderDemo(greeting || 'Hello'));
-        assert.ok(!demo.body.includes(env.PRIVATE_TEST_VALUE));
-        assert.match(demo.body, /<html lang="en">/);
-        assert.match(demo.body, /name="viewport"/);
-        assert.match(demo.body, /href="\/health"/);
+          type: 'text/html; charset=utf-8',
+          body: renderDemo(greeting || 'Hello'),
+        };
+        const home = await request(port, '/');
+        assert.deepEqual(home, rootResponse);
+        assert.deepEqual(await request(port, '/', { Accept: 'text/plain' }), rootResponse);
+        assert.deepEqual(await request(port, '/?preview=1'), rootResponse);
+        assert.deepEqual(await request(port, '/', {}, 'POST'), rootResponse);
+        assert.deepEqual(await request(port, '/', {}, 'HEAD'), { ...rootResponse, body: '' });
+        assert.ok(!home.body.includes(env.PRIVATE_TEST_VALUE));
+        assert.match(home.body, /^<!doctype html>/);
+        assert.match(home.body, /<html lang="en">/);
+        assert.match(home.body, /name="viewport"/);
+        assert.match(home.body, /href="\/health"/);
+        assert.ok(!home.body.includes('/demo'));
+        if (greeting?.startsWith('<script>')) {
+          assert.ok(home.body.includes('&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;hello&#39;'));
+          assert.ok(!home.body.includes('<script>'));
+        }
         assert.deepEqual(await request(port, '/health'), {
           status: 200,
           type: 'text/plain; charset=utf-8',
           body: 'OK\n',
+        });
+        assert.deepEqual(await request(port, '/health?check=1'), await request(port, '/health'));
+        assert.deepEqual(await request(port, '/health', {}, 'POST'), await request(port, '/health'));
+        assert.deepEqual(await request(port, '/health', {}, 'HEAD'), {
+          status: 200, type: 'text/plain; charset=utf-8', body: '',
         });
 
         assert.deepEqual(await request(port, '/not-found'), {
@@ -144,6 +153,11 @@ test('HTTP routes and public greeting work with no external services', { timeout
           type: 'text/plain; charset=utf-8',
           body: 'Not found\n',
         });
+        for (const path of ['/demo', '/demo?preview=1']) {
+          assert.deepEqual(await request(port, path), {
+            status: 404, type: 'text/plain; charset=utf-8', body: 'Not found\n',
+          });
+        }
       } finally {
         if (child.exitCode === null) child.kill('SIGTERM');
         await exited;
