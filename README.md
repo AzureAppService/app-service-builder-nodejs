@@ -75,8 +75,8 @@ Health and not-found text responses end with a newline. Stop the server with
 
 ## Deploy your fork with Portal
 
-See the [App Service Builder documentation](https://builderapps.azure.com/docs/)
-and [Portal quickstart](https://builderapps.azure.com/docs/quickstarts/portal/)
+See the [App Service Builder documentation](https://builder.appservice.azure.com/docs/)
+and [Portal quickstart](https://builder.appservice.azure.com/docs/quickstarts/portal/)
 for the current preview onboarding and deployment steps. This README describes
 the source configuration, not a live-verified cloud deployment.
 
@@ -114,7 +114,7 @@ the package and lockfile together, and retain the Node.js 24 engine requirement.
 
 The platform's compute build prepares the runnable app; the startup command is
 relative to the selected app root. See
-[runtime requirements](https://builderapps.azure.com/docs/reference/runtimes/)
+[runtime requirements](https://builder.appservice.azure.com/docs/reference/runtimes/)
 for the preview contract. The GitHub Actions workflow only validates the sample;
 it does **not** deploy to Azure.
 
@@ -140,7 +140,7 @@ For a deployed app, add `SAMPLE_GREETING` in Portal **Variables**.
 **Save and deploy** captures them in a new version. If you chose Save only,
 explicitly deploy a new version before verifying the greeting. Activating a
 retained version uses its historical values. Do not override reserved `PORT`.
-See the [variables guide](https://builderapps.azure.com/docs/guides/variables/).
+See the [variables guide](https://builder.appservice.azure.com/docs/guides/variables/).
 
 ## Push an update and explicitly redeploy
 
@@ -181,7 +181,7 @@ than a public issue. This sample is licensed under [MIT](LICENSE.md).
 
 ## Resources
 
-- [App Service Builder documentation](https://builderapps.azure.com/docs/)
-- [Portal quickstart](https://builderapps.azure.com/docs/quickstarts/portal/)
-- [Samples catalog](https://builderapps.azure.com/docs/samples/)
-- [Runtime requirements](https://builderapps.azure.com/docs/reference/runtimes/)
+- [App Service Builder documentation](https://builder.appservice.azure.com/docs/)
+- [Portal quickstart](https://builder.appservice.azure.com/docs/quickstarts/portal/)
+- [Samples catalog](https://builder.appservice.azure.com/docs/samples/)
+- [Runtime requirements](https://builder.appservice.azure.com/docs/reference/runtimes/)

@@ -102,7 +102,7 @@ FORM: Brief-pinned ink-and-lime showcase, with a responsive split composition.
       <div class="brand"><span class="mark" aria-hidden="true">js</span> App Service Builder</div>
       <nav aria-label="Main navigation">
         <span class="preview">Private preview</span>
-        <a href="https://builderapps.azure.com/docs/">Documentation <span aria-hidden="true">&nearr;</span></a>
+        <a href="https://builder.appservice.azure.com/docs/">Documentation <span aria-hidden="true">&nearr;</span></a>
       </nav>
     </header>
     <main id="main">

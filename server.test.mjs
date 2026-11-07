@@ -8,6 +8,11 @@ import { test } from 'node:test';
 import { renderDemo } from './demo.mjs';
 
 const root = new URL('./', import.meta.url);
+test('README documentation links use the canonical docs host', async () => {
+  const readme = await readFile(new URL('README.md', root), 'utf8');
+  assert.match(readme, /https:\/\/builder\.appservice\.azure\.com\/docs\//);
+  assert.doesNotMatch(readme, /https:\/\/builderapps\.azure\.com\/docs(?:\/|\b)/);
+});
 const expectedBuilder = `components:
   - name: web
     role: web
@@ -132,6 +137,8 @@ test('HTTP routes and public greeting work with no external services', { timeout
         assert.match(home.body, /<html lang="en">/);
         assert.match(home.body, /name="viewport"/);
         assert.match(home.body, /href="\/health"/);
+        assert.match(home.body, /href="https:\/\/builder\.appservice\.azure\.com\/docs\/"/);
+        assert.doesNotMatch(home.body, /https:\/\/builderapps\.azure\.com\/docs/);
         assert.ok(!home.body.includes('/demo'));
         if (greeting?.startsWith('<script>')) {
           assert.ok(home.body.includes('&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;hello&#39;'));
