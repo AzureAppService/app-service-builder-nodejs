@@ -15,7 +15,7 @@ for your preview access; this sample does not promise availability in any region
 
 The screenshot shows the visual showcase served directly at `/`.
 
-![Node.js root page with a lime greeting panel, HTTP response specimen, and in-page health check](docs/images/sample.png)
+![Node.js root greeting with the official language logo, Builder context and inline health check](docs/images/sample.png)
 
 Real local rendering in Microsoft Edge, not evidence of an Azure deployment.
 **Check app health** shows `/health` status on the page; the machine-readable
@@ -62,10 +62,11 @@ curl -i http://localhost:8080/not-found
 ```
 
 Open `http://localhost:8080/` in a browser for the visual Node.js showcase.
-It displays the same public greeting with a responsive ink-and-lime layout,
+It displays the same public greeting with a responsive soft-green layout,
 runtime details, real endpoint links, and keyboard-accessible expandable
-instructions. It uses inline CSS, system fonts, and no JavaScript or external
-assets. The root serves HTML directly, without a redirect or content negotiation.
+instructions. It uses inline CSS, system fonts, inline logos, and a small
+inline script for the health check; no external assets or packages are needed.
+The root serves HTML directly, without a redirect or content negotiation.
 
 | Path | Status | Response body |
 | --- | --- | --- |
@@ -193,3 +194,7 @@ than a public issue. This sample is licensed under [MIT](LICENSE.md).
 - [Runtime requirements](https://builder.appservice.azure.com/docs/reference/runtimes/)
 
 The product mark uses the supplied App Service Builder asset in `assets/AppServiceBuilder.svg`. Its SVG is inlined in the root page to preserve the existing routes and security policy. Keep the inline copy and asset in sync when updating the logo.
+
+## Language identity
+
+The page uses the official Node.js logo and links separately to Node.js documentation and Builder documentation. The greeting remains simple; no editor or counter was added. Logo provenance and trademark notices are available on the page and the original asset is retained under `assets/`.

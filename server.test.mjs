@@ -140,6 +140,10 @@ test('HTTP routes and public greeting work with no external services', { timeout
         assert.match(home.body, /href="https:\/\/builder\.appservice\.azure\.com\/docs\/"/);
         assert.doesNotMatch(home.body, /https:\/\/builderapps\.azure\.com\/docs/);
         assert.ok(!home.body.includes('/demo'));
+        assert.match(home.body, /Node\.js sample for App Service Builder/);
+        assert.match(home.body, /href="https:\/\/nodejs\.org\/docs\/latest\/api\/"/);
+        assert.match(home.body, /aria-label="Node\.js"/);
+        assert.doesNotMatch(home.body, /<input|id="counter"/);
         if (greeting?.startsWith('<script>')) {
           assert.ok(home.body.includes('&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;hello&#39;'));
           assert.ok(!home.body.includes('<script>alert'));
