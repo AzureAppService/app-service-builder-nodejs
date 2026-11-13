@@ -191,3 +191,5 @@ than a public issue. This sample is licensed under [MIT](LICENSE.md).
 - [Portal quickstart](https://builder.appservice.azure.com/docs/quickstarts/portal/)
 - [Samples catalog](https://builder.appservice.azure.com/docs/samples/)
 - [Runtime requirements](https://builder.appservice.azure.com/docs/reference/runtimes/)
+
+The product mark uses the supplied App Service Builder asset in `assets/AppServiceBuilder.svg`. Its SVG is inlined in the root page to preserve the existing routes and security policy. Keep the inline copy and asset in sync when updating the logo.
