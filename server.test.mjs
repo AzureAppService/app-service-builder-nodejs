@@ -142,7 +142,8 @@ test('HTTP routes and public greeting work with no external services', { timeout
         assert.ok(!home.body.includes('/demo'));
         if (greeting?.startsWith('<script>')) {
           assert.ok(home.body.includes('&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;hello&#39;'));
-          assert.ok(!home.body.includes('<script>'));
+          assert.ok(!home.body.includes('<script>alert'));
+          assert.equal((home.body.match(/<script>/g) ?? []).length, 1);
         }
         assert.deepEqual(await request(port, '/health'), {
           status: 200,
@@ -176,6 +177,9 @@ test('HTTP routes and public greeting work with no external services', { timeout
 test('demo renders public greeting only as escaped text', () => {
   const html = renderDemo('<script>alert("x")</script> & \'hello\'');
   assert.ok(html.includes('&lt;script&gt;alert(&quot;x&quot;)&lt;/script&gt; &amp; &#39;hello&#39;'));
-  assert.ok(!html.includes('<script>'));
+  assert.ok(!html.includes('<script>alert'));
+  assert.equal((html.match(/<script>/g) ?? []).length, 1);
+  assert.match(html, /data-health-path="\/health"/);
+  assert.match(html, /id="health-status" role="status"/);
   assert.ok(!html.includes('<script src='));
 });

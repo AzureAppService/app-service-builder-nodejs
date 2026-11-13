@@ -26,7 +26,10 @@ FORM: Brief-pinned ink-and-lime showcase, with a responsive split composition.
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--paper); color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
     a { color: inherit; text-underline-offset: 4px; }
-    a:focus-visible, summary:focus-visible { outline: 3px solid #477412; outline-offset: 5px; }
+    a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid #477412; outline-offset: 5px; }
+    button.button { border: 0; font-family: inherit; cursor: pointer; }
+    button:disabled { opacity: .7; cursor: wait; }
+    #health-status { font-size: 13px; line-height: 1.6; max-width: 55ch; }
     .skip { position: absolute; top: -80px; left: 20px; padding: 12px; background: var(--paper); z-index: 2; }
     .skip:focus { top: 12px; }
     .frame { max-width: 1440px; margin: auto; padding: 0 56px; }
@@ -102,7 +105,7 @@ FORM: Brief-pinned ink-and-lime showcase, with a responsive split composition.
       <div class="brand"><span class="mark" aria-hidden="true">js</span> App Service Builder</div>
       <nav aria-label="Main navigation">
         <span class="preview">Private preview</span>
-        <a href="https://builder.appservice.azure.com/docs/">Documentation <span aria-hidden="true">&nearr;</span></a>
+        <a href="https://builder.appservice.azure.com/docs/">Builder documentation <span aria-hidden="true">&nearr;</span></a>
       </nav>
     </header>
     <main id="main">
@@ -111,7 +114,8 @@ FORM: Brief-pinned ink-and-lime showcase, with a responsive split composition.
         <div class="greeting">
           <p class="hello">${text}<span aria-hidden="true">.</span></p>
           <p class="intro">A small server.<br>A place to start.<br>Node.js. Nothing extra.</p>
-          <a class="button" href="/health">Open health endpoint <span aria-hidden="true">&rarr;</span></a>
+          <button class="button" type="button" data-health-check data-health-path="/health">Check app health</button>
+          <p id="health-status" role="status" aria-live="polite">Checks this server's liveness, not Azure services.</p>
         </div>
         <div class="terminal">
           <div class="terminal-heading"><span><span class="terminal-icon" aria-hidden="true">&gt;_</span>HTTP response</span><span>GET /</span></div>
@@ -136,6 +140,24 @@ FORM: Brief-pinned ink-and-lime showcase, with a responsive split composition.
     </main>
     <footer><p>Development &amp; testing only. Not for production.</p><p>Local checks do not qualify a cloud deployment.</p></footer>
   </div>
+  <script>
+    const button = document.querySelector('[data-health-check]');
+    const status = document.querySelector('#health-status');
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      status.textContent = 'Checking this app...';
+      try {
+        const response = await fetch('/health', { cache: 'no-store', signal: AbortSignal.timeout(5000) });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        if ((await response.text()).trim() !== 'OK') throw new Error('Unexpected health response');
+        status.textContent = 'Healthy: /health returned HTTP 200 and OK. Server liveness only.';
+      } catch (error) {
+        status.textContent = 'Health check failed: ' + error.message + '. Retry the check.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
 `;

@@ -2,7 +2,7 @@ name: Validate Node.js sample
 
 on:
   push:
-    branches: [main]
+    branches: [main, sample-ux-refresh]
   pull_request:
 
 permissions:

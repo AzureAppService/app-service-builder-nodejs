@@ -15,7 +15,13 @@ for your preview access; this sample does not promise availability in any region
 
 The screenshot shows the visual showcase served directly at `/`.
 
-![Node.js demo with a lime greeting panel beside a dark HTTP response panel and runtime details](https://github.com/user-attachments/assets/0cdd1a8d-c906-4130-97e9-055b9ced4eb0)
+![Node.js root page with a lime greeting panel, HTTP response specimen, and in-page health check](docs/images/sample.png)
+
+Real local rendering in Microsoft Edge, not evidence of an Azure deployment.
+**Check app health** shows `/health` status on the page; the machine-readable
+endpoint still returns `OK`. This verifies server liveness, not Azure services.
+The **Make the greeting yours** disclosure explains the public variable and
+save/deploy workflow without guessing your app's Portal URL.
 
 ## Prerequisites
 
